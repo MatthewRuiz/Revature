@@ -1,0 +1,13 @@
+<aura:component implements="force:appHostable">
+    <aura:attribute name="cases" type="Case[]" />
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    
+    <div class="slds-box">
+    	<div class="slds-text-heading_large">My Open Cases</div>
+        <br />
+        <aura:iteration items="{!v.cases}" var="case">
+            <c:CaseListItem caseId="{!case.Id}" />
+        </aura:iteration>
+    </div>
+    
+</aura:component>

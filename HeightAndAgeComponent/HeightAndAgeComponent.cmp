@@ -1,0 +1,32 @@
+<aura:component >
+    <aura:attribute name="dateOfBirth" type="Date" default="1995-06-20" />
+    <aura:attribute name="heightFeet" type="Integer" default="5" />
+    <aura:attribute name="heightInches" type="Integer" default="8" />
+    
+    <div class="slds-grid slds-grid_vertical">
+    	<div class="slds-col">
+            <div class="slds-text-heading_large">Height and Age Conversion</div>
+            <br />
+            <div class="slds-list_horizontal">
+            	Hi, my date of birth is &nbsp;
+                <lightning:input type="date" value="{! v.dateOfBirth }" variant="label-hidden"/>
+                &nbsp; and my height is &nbsp;
+                <lightning:input type="number" value="{! v.heightFeet }" variant="label-hidden" />ft and &nbsp;
+                <lightning:input type="number" value="{! v.heightInches }" variant="label-hidden" />"
+            </div>
+            <br />
+            <br />
+        </div>
+        <div class="slds-col">
+        	<div class="slds-grid slds-gutters">
+            	<div class="slds-col">
+                    <c:HeightConvertor heightFeet="{! v.heightFeet }" heightInches="{! v.heightInches }" />
+                </div>
+                <div class="slds-col">
+                    <c:AgeConvertor dateOfBirth="{! v.dateOfBirth }" />
+                </div>
+            </div>
+        </div>
+    </div>
+    
+</aura:component>

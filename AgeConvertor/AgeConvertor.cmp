@@ -1,0 +1,18 @@
+<aura:component >
+   <aura:attribute name="dateOfBirth" type="Date" />
+   <aura:attribute name="years" type="Integer" />
+   <aura:attribute name="months" type="Integer" />
+   <aura:attribute name="weeks" type="Integer" />
+   <aura:attribute name="days" type="Integer" />
+
+   <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+   <aura:handler name="change" value="{!v.dateOfBirth}" action="{!c.process}"/>
+
+
+   <div class="slds-text-heading_medium">Age Conversions</div>
+   <div class="slds-text-heading_small">{!v.years} years</div>
+   <div class="slds-text-heading_small">or {!v.months} months</div>
+   <div class="slds-text-heading_small">or {!v.weeks} weeks</div>
+   <div class="slds-text-heading_small">or {!v.days} days</div>
+    
+</aura:component>

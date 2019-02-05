@@ -1,0 +1,17 @@
+<aura:component >
+    <aura:attribute name="heightFeet" type="Integer"/>
+    <aura:attribute name="heightInches" type="Integer"/>
+    <aura:attribute name="heightInCentimeters" type="Double"/>
+    <aura:attribute name="heightInMeters" type="Double"/>
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <aura:handler name="change" value="{!v.heightFeet}" action="{!c.process}" />
+    <aura:handler name="change" value="{!v.heightInches}" action="{!c.process}" />
+    
+    <div class="slds-text-heading_medium">Height Conversions</div>
+    <div class="slds-text-heading_small">{!v.heightFeet}ft {!v.heightInches}"</div>
+    <div class="slds-text-heading_small">or {!v.heightFeet + (v.heightInches * 0.084)} ft</div>
+    <div class="slds-text-heading_small">or <lightning:formattedNumber value="{!v.heightInCentimeters}" maximumFractionDigits="4"/>cm</div>
+    <div class="slds-text-heading_small"><lightning:formattedNumber value="{!v.heightInMeters}" minimumIntegerDigits="1"/> m</div>
+    
+</aura:component>

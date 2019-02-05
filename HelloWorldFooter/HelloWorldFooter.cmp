@@ -1,0 +1,15 @@
+<aura:component >
+    <lightning:card title="Contact Information">
+        <p><lightning:formattedEmail value="Matthew.Ruiz@Revature.com" /></p>
+        <p><p><lightning:formattedPhone value="2154851320" ></lightning:formattedPhone></p></p>
+        <p>
+            <lightning:formattedAddress
+                                        street="11730"
+                                        city="Reston"
+                                        country="US"
+                                        province="VA"
+                                        postalCode="20190"
+                                        />
+        </p>
+    </lightning:card>
+</aura:component>

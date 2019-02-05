@@ -1,0 +1,25 @@
+<aura:component >
+	<lightning:layout>
+    	<lightning:layoutItem padding="around-small">
+             <lightning:icon iconName="standard:user" alternativeText="User" />
+        </lightning:layoutItem>
+        <lightning:layoutItem padding="around-small">
+            <lightning:formattedName 
+                                     firstName="Matthew"
+                                     middleName="Zachary"
+                                     lastName="Ruiz"
+                                     informalName="Matt"
+                                     salutation="Mr."
+                                     format="short"
+                                     />
+        </lightning:layoutItem>
+        <lightning:layoutItem padding="around-small">
+            <lightning:formattedUrl 
+                                   value="https://www.linkedin.com/in/matthew-ruiz-099253116/"
+                                   tooltip="Go to my LinkedIn"
+                                   label="LinkedIn"
+                                   target="_blank"
+                                   />
+        </lightning:layoutItem>
+    </lightning:layout>
+</aura:component>
