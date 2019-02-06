@@ -1,0 +1,37 @@
+<aura:component implements="flexipage:availableForAllPageTypes,force:hasRecordId" controller="CreateCaseApexController" access="global">
+    <aura:attribute name="newCase" type="Case" default="{ 'sobjectType' : 'Case' }" />
+    <aura:attribute name="recordId" type="ID" />
+    
+    <div class="slds-box slds-card">
+        <div class="slds-page-header">
+            <h1 class="slds-page-header__title">Create New Case</h1>
+        </div>
+        
+        <div class="slds-form--stacked">
+            <div class="slds-form-element">
+                <label class="slds-form-element__label">Subject: </label>
+                <div class="slds-form-element__control">
+                    <ui:inputText class="slds-input" 
+                                  value="{!v.newCase.Subject}" required="true" />
+                </div>
+            </div>
+            <div class="slds-form-element">
+                <lightning:input label="Engineering Request Number: "
+                                 value="{!v.newCase.EngineeringReqNumber__c}" 
+                                 required="true" />
+            </div>
+            <div class="slds-form-element">
+                <lightning:textArea label="Description: "
+                                    value="{!v.newCase.Description}" 
+                                    required="true" />
+            </div>
+            <div class="slds-form-element">
+                <lightning:button variant="brand"
+                                  label="Save Case"
+                                  onclick="{!c.saveCase}" 
+                                  />
+            </div>
+        </div>
+    </div>
+    
+</aura:component>
