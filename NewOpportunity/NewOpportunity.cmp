@@ -1,0 +1,53 @@
+<aura:component implements="flexipage:availableForRecordHome,force:hasRecordId" access="global" >
+    <!-- Attributes -->
+    <aura:attribute name="newOpportunity" type="Opportunity" />
+    <aura:attribute name="simpleNewOpportunity" type="Opportunity" />
+    <aura:attribute name="newOpportunityError" type="String" />
+    
+    <!-- Handler -->
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    
+    <!-- 
+  LDS
+
+  aura:id		 - id of component
+  layoutType	 - Name of the layout to query, which determines the fields included. FULL or COMPACT
+  targetRecord - The provided record. This attribute will contain only fields relevant to layoutType.
+  targetFields - A simplified view of the fields in targetRecord, to reference record fields in component markup.
+  targetError  - Will be set to the localized error message if the record can't be provided.
+ -->
+    <force:recordData aura:id="opportunityRecordCreator" 
+                      layoutType="FULL"
+                      targetRecord="{!v.newOpportunity}"
+                      targetFields="{!v.simpleNewOpportunity}"
+                      targetError="{!v.newOpportunityError}"
+                      />
+    
+    
+    <!-- New Contact Form -->
+    <lightning:card iconName="standard:contact" title="Create Opportunity">
+        <div class="slds-p-horizontal--small">
+            <!-- Display Errors -->
+            <aura:if isTrue="{!not(empty(v.newOpportunityError))}">
+                <div class="slds-form-element__help slds-text-color_error">
+                    <h2 class="slds-text-heading_medium" title="Resolve Error"></h2>
+                </div>
+                
+                <aura:set attribute="else">
+                    <lightning:input  label="Opportunity Name: " value="{!v.simpleNewOpportunity.Name}" required="true"/>
+                    <lightning:input type="date" label="Close Date: " value="{!v.simpleNewOpportunity.CloseDate}" required="true"/>
+                    <lightning:select label="Stage: " value="{!v.simpleNewOpportunity.StageName}" required="true">
+                        <option value="">choose one...</option>
+                        <option value="Prospecting">Prospecting</option>
+                    </lightning:select>
+               
+                    <br />
+                    <lightning:button variant="brand" label="Save Opportunity" onclick="{!c.saveOpportunity}" />
+                    
+                </aura:set>
+            </aura:if>
+        </div>
+    </lightning:card>
+    
+    
+</aura:component>

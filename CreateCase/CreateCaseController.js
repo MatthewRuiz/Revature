@@ -13,11 +13,17 @@
             
             if (component.isValid() && state === "SUCCESS") {
                 console.log('Save success: ' + response.getReturnValue());
-                var navEvt = $A.get("e.force:navigateToSObject");
-                navEvt.setParams({
-                    "recordId": response.getReturnValue(),
+                
+                var caseEvent = $A.get("e.c:CaseCreatedEvent");
+                
+                console.log('accountId: ' + response.getReturnValue());
+                
+                caseEvent.setParams({
+                    "accountId" : response.getReturnValue() 
                 });
-                navEvt.fire();
+                
+                caseEvent.fire();
+                
             } else if (state === "ERROR") {
                 console.log('Problem saving case, response state: ' + state);
             } else {

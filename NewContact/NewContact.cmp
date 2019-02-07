@@ -1,0 +1,48 @@
+<aura:component implements="flexipage:availableForRecordHome,force:hasRecordId" access="global" >
+    <!-- Attributes -->
+    <aura:attribute name="newContact" type="Contact" />
+    <aura:attribute name="simpleNewContact" type="Contact" />
+    <aura:attribute name="newContactError" type="String" />
+    
+    <!-- Handler -->
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    
+    <!-- 
+		LDS
+
+		aura:id		 - id of component
+		layoutType	 - Name of the layout to query, which determines the fields included. FULL or COMPACT
+		targetRecord - The provided record. This attribute will contain only fields relevant to layoutType.
+		targetFields - A simplified view of the fields in targetRecord, to reference record fields in component markup.
+		targetError  - Will be set to the localized error message if the record can't be provided.
+	-->
+    <force:recordData aura:id="contactRecordCreator" 
+                      layoutType="FULL"
+                      targetRecord="{!v.newContact}"
+                      targetFields="{!v.simpleNewContact}"
+                      targetError="{!v.newContactError}"
+                      />
+    
+    
+    <!-- New Contact Form -->
+    <lightning:card iconName="standard:contact" title="Create Contact">
+    	<div class="slds-p-horizontal--small">
+        	<!-- Display Errors -->
+            <aura:if isTrue="{!not(empty(v.newContactError))}">
+            	<div class="slds-form-element__help slds-text-color_error">
+                	<h2 class="slds-text-heading_medium" title="Resolve Error">{!v.newContactError}</h2>
+                </div>
+                
+                <aura:set attribute="else">
+                    <lightning:input label="First Name" value="{!v.simpleNewContact.FirstName}" />
+                    <lightning:input label="Last Name" value="{!v.simpleNewContact.LastName}" />
+                    <lightning:input label="Title" value="{!v.simpleNewContact.Title}" />
+                    <br />
+                    <lightning:button label="Save Contact" variant="brand" onclick="{!c.saveContact}" />
+                </aura:set>
+            </aura:if>
+        </div>
+    </lightning:card>
+    
+    
+</aura:component>

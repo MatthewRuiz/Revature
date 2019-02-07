@@ -1,0 +1,11 @@
+<aura:component >
+    <aura:attribute name="priority" type="String" default="High" />
+    
+    <aura:registerEvent name="priorityEventChange" type="c:TestEvent" />
+    
+    <lightning:select label="Priority" required="true" onchange="{!c.priorityChange}" value="{!v.priority}">
+    	<option value="High">High</option>
+        <option value="Low">Low</option>
+        <option value="Medium">Medium</option>
+    </lightning:select>
+</aura:component>

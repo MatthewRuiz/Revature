@@ -1,4 +1,4 @@
-<aura:component implements="force:appHostable">
+<aura:component implements="force:appHostable" controller="MyOpenCasesApexController">
     <aura:attribute name="cases" type="Case[]" />
     <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
     

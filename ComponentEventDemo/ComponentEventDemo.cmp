@@ -1,0 +1,18 @@
+<aura:component controller="ComponentEventApexController">
+    <aura:attribute name="priority" type="String" default="High" />
+    
+    <aura:attribute name="data" type="Object" />
+    <aura:attribute name="columns" type="List" />
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <!-- Handler the Priority Change Event -->
+    <aura:handler name="priorityChangeEvent" event="c:ComponentEvent" action="{!c.handlePriorityChangeEvent}" />
+    
+    <c:ComponentEventDemoFilter />
+    <br />
+    <lightning:datatable 
+                         keyField="id"
+                         data="{!v.data}"
+                         columns="{!v.columns}"
+                         hideCheckboxColumn="true"/>
+</aura:component>

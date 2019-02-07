@@ -1,0 +1,10 @@
+<aura:component implements="flexipage:availableForRecordHome">
+    <aura:attribute name="accountId" type="ID" />
+    
+    <aura:handler event="c:CaseCreatedEvent" action="{!c.handleCaseCreatedEvent}" />
+    
+    <!-- Display an Account -->
+    <lightning:card iconName="standard:contact" title="">
+        <force:recordView recordId="{!v.accountId}" />
+    </lightning:card>
+</aura:component>
