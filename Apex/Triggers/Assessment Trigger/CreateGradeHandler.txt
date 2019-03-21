@@ -1,0 +1,112 @@
+public class CreateGradeHandler {
+    /*
+     * When Class Enrollments(CEs) are created, create grade records for all Assessments for those classes.
+     * 
+     * Parameter: 
+     * 	- newCEs : The CEs that were created.
+     * 
+     * */
+    public static void createGradesForClassEnrollments(List<ClassEnrollment__c> newCEs) {
+        
+        // Bad Way #1 - Bad because it cannot handle bulk operations.
+        /*List<Grade__c> gsToInsert = new List<Grade__c>();
+        
+        Id classId = newCEs[0].Class__c;
+        for(Assessment__c a : [SELECT Id, Class__c FROM Assessment__c WHERE Class__c = :classId]) {
+            Grade__c g = new Grade__c();
+            g.Assessment__c = a.Id;
+            g.ClassEnrollment__c = newCEs[0].Id;
+            gsToInsert.add(g);
+        }*/
+        
+        // Bad Way #2 - Bad because there is a SOQL query inside of a for loop.
+        /*List<Grade__c> gsToInsert = new List<Grade__c>();
+        for (ClassEnrollment__c ce : newCEs) {
+            Id classId = ce.Class__c;
+            for(Assessment__c a : [SELECT Id, Class__c FROM Assessment__c WHERE Class__c = :classId]) {
+                Grade__c g = new Grade__c();
+                g.Assessment__c = a.Id;
+                g.ClassEnrollment__c = ce.Id;
+                gradesToInsert.add(g);
+            }
+        }*/
+        
+        
+        List<Id> classIds = new List<Id>();
+        for(ClassEnrollment__c ce : newCEs) {
+            classIds.add(ce.Class__c);
+        }
+        
+        List<Grade__c> gradesToInsert = new List<Grade__c>();
+        for(Assessment__c assmt : [SELECT Id, Class__c FROM Assessment__c WHERE Class__c IN :classIds]) {
+            for(ClassEnrollment__c ce : newCEs) { 
+                // Only create a grade if CE and Assessment point to the same class.
+                if(ce.Class__c == assmt.Class__c) {
+                    Grade__c g = new Grade__c();
+                    g.Assessment__c = assmt.Id;
+                    g.ClassEnrollment__c = ce.Id;
+                    gradesToInsert.add(g);
+                }
+            }
+        }
+        insert gradesToInsert;
+    }
+    
+    /*
+     * When Assessments are created, create grade records for all students enrolled in that class.
+     * Parameter: 
+     * 	- assmnts : The Assessments that were created.
+     * 
+     * NOTE: Please work through this example by hand if Maps are confusing. 
+     * */
+    public static void createGradesForAssessments(List<Assessment__c> assmnts) {
+        Map<Id, List<Id>> mapClassIdToAssmntId = new Map<Id, List<Id>>();
+        
+        for (Assessment__c a : assmnts) {
+            if(!mapClassIdToAssmntId.containsKey(a.Class__c)) {
+                mapClassIdToAssmntId.put(a.Class__c, new List<Id>());
+            }
+            mapClassIdToAssmntId.get(a.Class__c).add(a.Id);
+
+        }
+        List<Grade__c> gradesToInsert = new List<Grade__c>();
+        
+        for (ClassEnrollment__c ce : [SELECT Id, Class__c FROM ClassEnrollment__c
+                                      WHERE Class__c IN :mapClassIdToAssmntId.keySet()]) {
+            for (Id aId : mapClassIdToAssmntId.get(ce.Class__c)) {
+                Grade__c g = new Grade__c();
+                g.Assessment__c = aId;
+                g.ClassEnrollment__c = ce.Id;
+                gradesToInsert.add(g);
+            }
+        }
+        insert gradesToInsert;
+    }
+
+    /*
+     * When Grades are created, make sure that there aren't grades already created for the Assessment(s)
+     * Parameter: 
+     * 	- grades : The Grades that were created.
+     * 
+     * NOTE: Please work through this example by hand if Maps are confusing. 
+     * */
+    public static void preventDuplicateGrades(List<Grade__c> grades) {
+        Map<Id, List<Grade__c>> mapAssmntIdToGradeId = new Map<Id, List<Grade__c>>();
+        
+        for (Grade__c g : grades) {
+            if (!mapAssmntIdToGradeId.containsKey(g.Assessment__c)) {
+                mapAssmntIdToGradeId.put(g.Assessment__c, new List<Grade__c>());
+            }
+            mapAssmntIdToGradeId.get(g.Assessment__c).add(g);
+        }
+        
+        for (Grade__c gDB : [SELECT Id, Assessment__c, ClassEnrollment__c, ClassEnrollment__r.Student__c FROM Grade__c WHERE Assessment__c IN :mapAssmntIdToGradeId.keySet()]) {
+            for (Grade__c gToInsert : mapAssmntIdToGradeId.get(gDB.Assessment__c)) {
+                if (gDB.ClassEnrollment__c == gToInsert.ClassEnrollment__c) {
+                    // The .addError() method displays an error message in the User's UI, just like Validation Rules.
+                    gToInsert.addError('Student: ' + gDB.ClassEnrollment__r.Student__c + ' already has a grade for Assessment: ' + gDB.Assessment__c);
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,311 @@
+//Example 1
+List<Account> aa = [SELECT Id, Name FROM Account WHERE Name = 'Acme'];
+
+//Example 1.1
+if (!aa.isEmpty()){
+    //Execute commands
+}
+
+//Example 1.2
+Contact c = new Contact(Account = [SELECT Name FROM Account WHERE NumberOfEmployees > 10 LIMIT 1]);
+c.FirstName = 'James';
+c.LastName = 'Yoyce';
+
+//Example 1.3
+Integer i = [SELECT COUNT() FROM Contact WHERE LastName = 'Weissman'];
+
+//Example 1.4
+Integer j = 5 * [SELECT COUNT() FROM Account];
+
+/* ******************************************************** */
+//Example 2
+List<List<SObject>> searchList = [FIND 'map*' IN ALL FIELDS RETURNING Account(Id, Name), Contact, Opportunity, Lead];
+
+//Example 2.1
+Account [] accounts = ((List<Account>)searchList[0]);
+Contact [] contacts = ((List<Contact>)searchList[1]);
+Opportunity [] opportunities = ((List<Opportunity>)searchList[2]);
+Lead [] leads = ((List<Lead>)searchList[3]);
+
+/* ***************************************************** */
+//Example 3
+/* Syntax
+*       SELECT one or more fields
+*       FROM an object
+*       WHERE filter statements and, optionally, results are ordered
+*/
+//Example 3.1
+Select Id, Name
+FROM Account
+WHERE Name = 'Sandy'
+
+/* ******************************************************* */
+//Example 4
+SELECT count()
+FROM Contact c, c.Account a
+WHERE a.name = 'MyraidPubs'
+
+//Example 4.1 - Condition expression examples
+SELECT Name FROM Account WHERE Name LIKE 'A%'
+SELECT Id FROM Contact WHERE Name LIKE 'A%' AND MailingState = 'California'
+SELECT Name FROM Account WHERE CreatedDate > 2011-04-26T10:00:00-08:00
+SELECT Amount FROM Opportunity WHERE CALENDAR_YEAR(CreatedDate) = 2011
+
+//Example 4.2
+SELECT AccountId FROM Event WHERE ActivityDate != null
+
+//Example 4.3
+WHERE BooleanField = TRUE
+
+//Example 4.4
+SELECT Id, MSP1__c FROM CustObj__c WHERE MSP1__c = 'AAA;BBB'
+
+//Example 4.5
+SELECT Id, MSP1__c FROM CustObj__c WHERE MSP1__c includes ('AAA;BBB', 'CCC')
+
+
+//Example 4.6
+SELECT AccountId, FirstName, LastName
+FROM Contact
+WHERE LastName LIKE 'app1%'
+
+//Example 4.7
+SELECT Name FROM Account
+WHERE BillingState IN ('California', 'New York')
+
+//Example 4.8
+SELECT Name FROM Account
+WHERE BillingState NOT IN ('California', 'New York')
+
+//Example 4.9
+SELECT Id, Name FROM Account
+WHERE Id IN (
+    SELECT AccountId FROM Opportunity
+    WHERE StageName = 'Closed Lost'
+)
+
+//Example 4.10
+SELECT Id FROM Task
+WHERE WhoId IN (
+    SELECT Id FROM Contact
+    WHERE MailingCity = 'Twin Falls'
+)
+
+//Example 4.11
+SELECT Id FROM Account
+WHERE Id NOT IN (
+    SELECT AccountId FROM Opportunity
+    WHERE IsClosed = false
+)
+
+/* *************************************************************** */
+//Example 5
+SELECT Name FROM Account
+WHERE Industry = 'Media' LIMIT 125
+
+//Example 5.1
+SELECT Name FROM Merchandise__c
+WHERE Price__C > 5.0
+ORDER BY Name
+LIMIT 100
+OFFSET 10
+
+//Example 5.2
+SELECT LeadSource, COUNT(Name)
+FROM Lead
+GROUP BY LeadSource
+
+//Example 5.3
+SELECT LeadSource, COUNT(Name)
+FROM Lead
+GROUP BY ROLLUP(LeadSource)
+
+//Example 5.4 - grouping by two rollup fields
+SELECT Status, LeadSource, COUNT(Name)
+FROM Lead
+GROUP BY ROLLUP(Status,LeadSource)
+
+//Example 5.5
+// returns LeadSource values that have generated more then 100 leads
+SELECT LeadSource, COUNT(Name)
+FROM Lead
+GROUP BY LeadSource
+HAVING COUNT(Name) > 100
+
+//Example 5.6
+// returns accounts with duplicate names
+SELECT Name, COUNT(Id)
+FROM Account
+GROUP BY Name
+HAVING Count(Id) > 1
+
+//Example 5.7 - formatting
+SELECT FORMAT(amount), FORMAT(lastModifiedDate) 
+FROM Opportunity
+
+//Example 5.8
+SELECT Name, Id FROM Contact LIMIT 1 FOR REFERENCE
+
+//Example 5.9
+SELECT CALENDAR_YEAR(CloseDate)
+FROM Opportunity
+GROUP BY CALENDAR_YEAR(CloseDate)
+
+/* *************************************************************** */
+//Example 6
+
+//Example 6.1
+SELECT Id, Name, Account.Name
+FROM Contact
+WHERE Account.Industry = 'media'
+
+//Example 6.2
+SELECT Name, (SELECT LastName FROM Contacts)
+FROM Account
+
+//Example 6.3
+SELECT Name,
+    (SELECT CreatedBy.Name FROM Notes)
+FROM Account
+
+//Example 6.4
+SELECT Amount, Id, Name, 
+    (SELECT Quantity,
+            ListPrice,
+            PricebookEntry.UnitPrice,
+            PricebookEntry.Name
+    FROM OpportunityLineItems)
+FROM Opportunity
+
+//Example 6.4.1
+SELECT Amount, Id, Name, 
+    (SELECT Quantity,
+            ListPrice,
+            PricebookEntry.UnitPrice,
+            PricebookEntry.Name, PricebookEntry.Product2.Family
+    FROM OpportunityLineItems)
+FROM Opportunity
+
+//Example 6.5
+SELECT Name,
+    (SELECT LastName
+     FROM Contacts
+     WHERE CreatedBy.Alias = 'x')
+FROM Account
+WHERE Industry = 'media'
+
+/* *************************************************************** */
+//Example 7
+
+//Example 7.1
+SELECT Id, FirstName, LastName, AccountId, Account.Name
+FROM Contact
+WHERE Account.Name LIKE 'Acme%'
+
+//Example 7.2
+SELECT Id, Name,
+    (SELECT Id,
+            FirstName,
+            LastName
+     FROM Contacts)
+FROM Account
+WHERE Name LIKE 'Acme%'
+
+/* *************************************************************** */
+//Example 8
+FIND {SearchQuery}
+[ IN SearchGroup ]
+[ RETURNING FieldSpec [ [toLabel(fields)] [convertCurrency(Amount)] [FORMAT()]] ]
+[ WITH DivisionFilter ]
+[ WITH DATA CATEGORY DataCategorySpec ]
+[ WITH SNIPPET[(target_length=n)] ]
+[ WITH NETWORK NetworkIdSpec ]
+[ WITH PricebookId ]
+[ WITH METADATA ]
+[ LIMIT n ]
+
+[ UPDATE [TRACKING], [VIEWSTAT] ]
+
+/* *************************************************************** */
+//Example 9
+
+//Example 9.1
+FIND {joe}
+
+//Example 9.2
+FIND {Joe Smith}
+
+//Example 9.3
+FIND {Joe Smith}
+IN NAME FIELDS
+RETURNING Lead
+
+//Example 9.4
+FIND {Joe Smith}
+IN NAME FIELDS
+RETURNING Lead(Name, Phone)
+
+//Example 9.5
+FIND {Joe Smith}
+IN NAME FIELDS
+RETURNING LEAD(Name, Phone WHERE CreateDate = THIS_FISCAL_QUARTER)
+
+//Example 9.6
+FIND {"Joe Smith" OR "Joe Smythe"}
+IN NAME FIELDS
+RETURNING Lead(Name, Phone), Contact(Name, Phone)
+
+//Example 9.7
+// Wildcards
+// * = zero or more characters
+// ? = exactly one character
+FIND {Joe Sm*}
+FIND {Joe Sm?th*}
+
+//Example 9.8
+FIND {"and" OR "or"}
+FIND {"joe and mary"}
+FIND {in}
+FIND {returning}
+FIND {find}
+
+//Example 9.9
+// Escaping characters - some characters are special in the sense the compiler interprets them as a specific meanining.
+// For instance, when it see the } character, it interprets it as the closing brace of a certain block (method,property,class, etc.)
+// We'd want to check for this character in some cases, so we escape it by putting a backslash(\) before it. 
+FIND {right brace \}}
+FIND {asterisk \*}
+FIND {question \?}
+//FIND {single quote \'}
+FIND {double quote \"}
+
+/* *************************************************************** */
+//Example 10
+FIND {Acme}
+RETURNING Account(Id, LastModifiedDate, FORMAT(LastModifiedDate))
+
+/* *************************************************************** */
+//Example 11
+
+//Example 11.1
+FIND {test} RETURNING Account(id), Contact LIMIT 20
+
+//Example 11.2
+FIND {test} RETURNING Account(id LIMIT 20), Contact LIMIT 100
+
+/* *************************************************************** */
+//Example 12
+
+//Example 12.1
+FIND {MyName} RETURNING Account(Name, Id ORDER BY Id)
+
+//Example 12.2
+FIND {MyContactName} RETURNING Contact(Name, Id ORDER BY Name), Account(Description, Id ORDER BY Description)
+
+//Example 12.3
+FIND {MyAccountName} IN NAME FIELDS RETURNING Account(Name, Id ORDER BY Name DESC NULLS last)
+
+//Example 12.4
+FIND {San Francisco} RETURNING My_Custom_Object__c (Name, Id WHERE DISTANCE(My_Location_Field__c, GEOLOCATION(37,122),'mi') < 500 ORDER BY DISTANCE(My_Location_Field__c, GEOLOCATION(37,122),'mi') DESC)
+
+
