@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8" >
+        <title>HTML Intro</title>
+    </head>
+    <body>
+        <div id="TOP"></div>
+        <!-- Paragraph tags -->
+        <p>Hello World</p>
+        <p>My name is Matt</p>
+
+        This is the third line. <br /> <!-- Line break -->
+        And then the fourth line.<br />
+    
+        <!-- Image tag -->
+        <!-- alt attribute is used when the image cannot load. -->
+        <!-- title attribute is used to display text when user hovers over image. -->
+        <img src="http://www.placebear.com/400/400"
+                 width="400" height="400" 
+                 alt="Some bears" 
+                 title="2 bears chillen"/>
+        
+        <!-- img using relative path -->
+        <img src="bears.jpg"
+                 width="400" height="400" 
+                 alt="Some bears" 
+                 title="2 bears chillen"/>
+        <img src="../images/bears2.jpg"
+                 width="400" height="400" 
+                 alt="Some bears" 
+                 title="2 bears chillen"/>
+        <!-- img using absolute path -->
+        <img src="C:\Users\Revature\Documents\Work\Saleforce-Batches\022519salesforce\HTMLCSS\images\bears2.jpg"
+                 width="400" height="400" 
+                 alt="Some bears" 
+                 title="2 bears chillen"/>   
+        <br />
+
+        <!-- Link/anchor tag -->
+        <!-- href is where the user is taken when they click on it -->
+        <!-- target="_blank" opens a new tab in the browser. -->
+        <a href="http://www.Google.com" target="_blank">Google</a>
+
+        <!-- Headings -->
+        <h1 id="gotoH1">h1</h1>
+        <h2>h2</h2>
+        <h3>h3</h3>
+        <h4>h4</h4>
+        <h5>h5</h5>
+        <h6>h6</h6>
+
+        <!-- b bolds the text -->
+        <!-- i italicizes -->
+        <p><b>bold</b> <i>italics</i> <strong>strong</strong></p>
+
+        <!-- Lists -->
+        <div>
+            <ul>
+                <li>
+                    180910Salesforce
+                    <ol>
+                        <li>Matt</li>
+                        <li>Ben</li>
+                        <li>Eric</li>
+                    </ol>
+                </li>
+                <li>
+                    022519Salesforce
+                    <ol>
+                        <li>Matt</li>
+                        <li>Harry</li>
+                        <li>David</li>
+                    </ol>
+                </li>
+            </ul>
+        </div>
+        <!-- 
+            Divs are Block by default
+                - meaning they span the width of the page 
+        -->
+        <div>div1</div>
+        <div>div2</div>
+        <div>div3</div>
+
+        <!-- 
+            Span 
+                - Inline element, used to apply CSS styles
+        -->
+        <span>span1</span>
+        <span>span2</span>
+        <span>span3</span>
+
+        <!-- Table -->
+        <table>
+            <!-- table row -->
+            <tr>
+                <!-- table header -->
+                <th>Name</th>
+                <th>Age</th>
+            </tr>
+            <tr>
+                <!-- table data -->
+                <td>Joe</td>
+                <td>25</td>
+            </tr>
+            <tr>
+                <td>Bill</td>
+                <td>40</td>
+            </tr>
+        </table>
+
+        <!-- iframe - a website within a website -->
+        <!-- <iframe src="http://www.techcrunch.com"></iframe> -->
+        
+        <!-- Forms - Client-side validation -->
+        <!-- action specifies script URL -->
+        <form action="" method="POST">
+            Name: <input type="text" /> <br />
+            Password: <input type="password" /> <br />
+            Age: <input type="number" name="age" min="18" max="155" /> <br />
+    
+            Gender:<br />
+                <input type="radio" name="gender" value="male"/>M<br />
+                <input type="radio" name="gender" value="female"/>F<br />
+            Hobbies: <br />
+                Fishing<input type="checkbox" name="hobby" value="fishing" /><br />
+                Movies<input type="checkbox" name="hobby" value="Movies" /><br />
+                Shapes<input type="checkbox" name="hobby" value="Shapes" /><br />
+                Racecar<input type="checkbox" name="hobby" value="Racecar" /><br />
+            <input type="submit" />
+        </form>
+
+        <!-- Jump around page -->
+        <a href="#TOP">Go to top</a>
+        <a href="#gotoH1">Go to H1</a>
+
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+
+    </body>     
+</html>
